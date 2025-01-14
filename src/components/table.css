@@ -1,0 +1,165 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    #select-co{
+      padding:10px;
+      padding-right:100px;
+    }
+    #select-subject{
+      padding:10px;
+      padding-right:100px;
+    }
+  }
+  
+  .submit-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .submit-button:hover {
+    background-color: #0056b3;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  table th,
+  table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  table th {
+    background-color: #f4f4f4;
+  }
+  
+  .edit-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  .edit-button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .edit-button:hover {
+    background-color: #218838;
+  }
+  
+  .delete-icon,
+  .add-icon,
+  .edit-icon {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  
+  .delete-icon {
+    color: #dc3545;
+  }
+  
+  .add-icon {
+    color: #28a745;
+  }
+  
+  .edit-icon {
+    color: #ffc107;
+  }
+  
+  .delete-icon:hover {
+    color: #c82333;
+  }
+  
+  .add-icon:hover {
+    color: #218838;
+  }
+  
+  .edit-icon:hover {
+    color: #e0a800;
+  }
+  /* Align action buttons inside the table */
+  .action-column {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  /* Edit Icon Styles */
+  .edit-icon {
+    color: #ffc107;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  
+  /* Delete Icon Styles */
+  .delete-icon {
+    color: #dc3545;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  
+  /* Add Row Button Styles */
+  .add-icon {
+    color: #28a745;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 20px; /* Space between edit button and add button */
+  }
+  
+  .add-icon:hover {
+    color: #218838;
+  }
+  
+  .delete-icon:hover {
+    color: #c82333;
+  }
+  
+  .edit-icon:hover {
+    color: #e0a800;
+  }
+  

@@ -1,4 +1,5 @@
-export const sampleInput=[
+
+ const sampleInput=[
     {
       "pi": null,
       "co": "3",
@@ -240,3 +241,5 @@ export const sampleInput=[
       "no": "16"
     }
   ]
+
+export default sampleInput;
