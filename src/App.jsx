@@ -1,20 +1,26 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./App.css";
+import { sampleInput } from "./sampleInput";
 
 const App = () => {
-  const [rows, setRows] = useState(
-    Array.from({ length: 10 }, (_, index) => ({
-      id: index + 1,
-      qno: `Q${index + 1}`,
-      option: "Option",
-      subdivision: "Subdivision",
-      question: "Sample Question",
-      marks: 10,
-      co: "CO1",
-      pi: "PI1",
-      isEditable: false, // To toggle individual row editing
-    }))
+
+  const [rowCount,setRowCount] = useState(0);
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    const initializedRows = sampleInput.map((row, index) => ({
+      ...row,
+      isEditable: false,
+      id: index + 1, // Use the index to generate unique IDs
+    })
   );
+    setRows(initializedRows);
+    setRowCount(sampleInput.length + 1); // Set the ID to the next available number
+  }, []);
+
+
+  console.log("Before mapping",sampleInput);
+  console.log("After mapping",rows);
 
   const [isEditingMode, setIsEditingMode] = useState(false);
 
@@ -44,23 +50,29 @@ const App = () => {
   // Add a new row
   const handleAddRow = () => {
     const newRow = {
-      id: rows.length + 1,
-      qno: `Q${rows.length + 1}`,
-      option: "New Option",
-      subdivision: "New Subdivision",
+      id:  rowCount,
+      qno: "Enter Qno",
+      option: "Enter Option",
+      subdivision: "Enter Subdivision",
       question: "New Question",
-      marks: 0,
-      co: "CO1",
-      pi: "PI1",
+      marks: "Enter Marks",
+      co: "Enter CO",
+      pi: "Enter PI",
       isEditable: false,
     };
     setRows([...rows, newRow]);
+    setRowCount(rowCount+1);
   };
 
   // Delete a row
   const handleDeleteRow = (id) => {
     const updatedRows = rows.filter((row) => row.id !== id);
     setRows(updatedRows);
+  };
+
+  const handleSave = () => {
+    // Save the data to the backend
+    console.log("Saved data:", rows);
   };
 
   return (
@@ -106,13 +118,13 @@ const App = () => {
                 {row.isEditable ? (
                   <input
                     type="text"
-                    value={row.qno}
+                    value={row.no}
                     onChange={(e) =>
                       handleInputChange(row.id, "qno", e.target.value)
                     }
                   />
                 ) : (
-                  row.qno
+                  row.no
                 )}
               </td>
               <td>
@@ -220,8 +232,13 @@ const App = () => {
 
       {/* Edit Button Section */}
       <div className="edit-controls">
+      {!isEditingMode && (
         <button className="edit-button" onClick={toggleEditMode}>
-          {isEditingMode ? "Save All" : "Edit"}
+          Edit
+        </button>
+      )}
+        <button className="edit-button" onClick={handleSave} >
+          Save
         </button>
         {/* Add Row Button, Always Visible Outside the Table */}
         {isEditingMode && (
