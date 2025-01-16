@@ -1,10 +1,11 @@
 import React, { useState,useEffect } from "react";
 import sampleInput from "../sampleInput.js";
-import "./table.css";
+import "./QuestionMapTable.css";
 
 const Table = () => {
     const [rowCount,setRowCount] = useState(0);
-      const [rows, setRows] = useState([]);
+    const [rows, setRows] = useState([]);
+    const [isEditingMode, setIsEditingMode] = useState(false);
     
       useEffect(() => {
         const initializedRows = sampleInput.map((row, index) => ({
@@ -16,12 +17,7 @@ const Table = () => {
         setRows(initializedRows);
         setRowCount(sampleInput.length + 1); // Set the ID to the next available number
       }, []);
-    
-    
-      console.log("Before mapping",sampleInput);
-      console.log("After mapping",rows);
-    
-      const [isEditingMode, setIsEditingMode] = useState(false);
+      
     
       // Toggle table-wide edit mode
       const toggleEditMode = () => {
@@ -69,15 +65,16 @@ const Table = () => {
         setRows(updatedRows);
       };
     
+      // Save the table data 
       const handleSave = () => {
         // Save the data to the backend
         console.log("Saved data:", rows);
-        toggleEditMode();
+        setIsEditingMode(false);
       };
     
       return (
         <div className="container">
-          <h1>Student COS and Subject Entry</h1>
+          <h1>Map Questions</h1>
     
           {/* Form Section */}
           <div className="form">

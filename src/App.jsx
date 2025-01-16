@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from "react";
 import "./App.css";
-import Table from "./components/table.jsx";
+import Table from "./components/QuestionMapTable.jsx";
 const App = () => {
   return (
     <div className="App">
