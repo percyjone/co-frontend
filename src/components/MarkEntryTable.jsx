@@ -89,65 +89,164 @@ const NestedMarkEntryTable = () => {
 
   return (
     <>
-    <Paper sx={{ width: '100%' }}>
-      <TableContainer sx={{ maxHeight: '100vh' }}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              <TableCell style={{backgroundColor: '#F8F9FA', position: 'sticky', top: 0, zIndex: 1 }} align="center" key={1}>Student name</TableCell>
-              {slicedQuestionOccurences.map((count, index) => (
-                <TableCell style={{backgroundColor: '#F8F9FA', position: 'sticky', top: 0, zIndex: 1 }} align="center" key={index} colSpan={count}>Q{index + 1}</TableCell>
-              ))}
-            </TableRow>
+   <Paper sx={{ width: '100%' }}>
+  <TableContainer sx={{ maxHeight: '100vh', overflowX: 'auto' }}>
+    <Table stickyHeader aria-label="sticky table">
+      <TableHead>
+        {/* Question number row */}
+        <TableRow>
+          <TableCell
+            style={{
+              backgroundColor: '#F8F9FA',
+              position: 'sticky',
+              top: 0,
+              left: 0, // Sticky left for the first column
+              zIndex: 2,
+              padding: 0,
+            }}
+            align="center"
+            key={1}
+          >
+            Student Name
+          </TableCell>
+          {slicedQuestionOccurences.map((count, index) => (
+            <TableCell
+              style={{
+                backgroundColor: '#F8F9FA',
+                position: 'sticky',
+                top: 0,
+                zIndex: 1,
+              }}
+              align="center"
+              key={index}
+              colSpan={count}
+            >
+              Q{index + 1}
+            </TableCell>
+          ))}
+        </TableRow>
 
-            <TableRow>
-              <TableCell style={{backgroundColor: '#F8F9FA', position: 'sticky', top: 36, zIndex: 1 }}></TableCell>
-              {allOptions.map((value, index) => (
-                typeof value === 'string' ? (
-                  <TableCell style={{backgroundColor: '#F8F9FA', position: 'sticky', top: 36, zIndex: 1 }} align="center" key={index} colSpan={1}>{value}</TableCell>
-                ) : <TableCell style={{backgroundColor: '#F8F9FA', position: 'sticky', top: 36,zIndex: 1 }}></TableCell>
-              ))}
-            </TableRow>
+        {/* Option row */}
+        <TableRow>
+          <TableCell
+            style={{
+              backgroundColor: '#F8F9FA',
+              position: 'sticky',
+              top: 36, // Adjust top for multi-row headers
+              left: 0, // Sticky left for the first column
+              zIndex: 2,
+            }}
+          />
+          {allOptions.map((value, index) =>
+            typeof value === 'string' ? (
+              <TableCell
+                style={{
+                  backgroundColor: '#F8F9FA',
+                  position: 'sticky',
+                  top: 36,
+                  zIndex: 1,
+                }}
+                align="center"
+                key={index}
+                colSpan={1}
+              >
+                {value}
+              </TableCell>
+            ) : (
+              <TableCell
+                style={{
+                  backgroundColor: '#F8F9FA',
+                  position: 'sticky',
+                  top: 36,
+                  zIndex: 1,
+                }}
+              />
+            )
+          )}
+        </TableRow>
 
-            <TableRow>
-              <TableCell style={{backgroundColor: '#F8F9FA', position: 'sticky', top: 72, zIndex: 1 }}></TableCell>
-              {allSubdivisions.map((subDivision, index) => (
-                typeof subDivision === 'string' ? (
-                  <TableCell style={{backgroundColor: '#F8F9FA', position: 'sticky', top: 72, zIndex: 1 }} align="center" key={index} colSpan={1}>{subDivision}</TableCell>
-                ) : <TableCell style={{backgroundColor: '#F8F9FA', position: 'sticky', top: 72,zIndex: 1 }}></TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
+        {/* Subdivision row */}
+        <TableRow>
+          <TableCell
+            style={{
+              backgroundColor: '#F8F9FA',
+              position: 'sticky',
+              top: 72, // Adjust top for multi-row headers
+              left: 0, // Sticky left for the first column
+              zIndex: 2,
+            }}
+          />
+          {allSubdivisions.map((subDivision, index) =>
+            typeof subDivision === 'string' ? (
+              <TableCell
+                style={{
+                  backgroundColor: '#F8F9FA',
+                  position: 'sticky',
+                  top: 72,
+                  zIndex: 1,
+                  padding: '6px'
+                }}
+                align="center"
+                key={index}
+                colSpan={1}
+              >
+                {'i'.repeat(subDivision)}
+              </TableCell>
+            ) : (
+              <TableCell
+                style={{
+                  backgroundColor: '#F8F9FA',
+                  position: 'sticky',
+                  top: 72,
+                  zIndex: 1,
+                }}
+              />
+            )
+          )}
+        </TableRow>
+      </TableHead>
 
-          <TableBody>
-            {studentsData.map((student, studentIndex) => (
-              <TableRow key={studentIndex}>
-                <TableCell>{student.name}</TableCell>
-                {student.answers.map((answer, questionIndex) => (
-                  <TableCell 
-                    key={questionIndex} 
-                    onInput={(e) => {
-                     e.target.innerText = e.target.innerText.replace(/[^0-9]/g, ''); // Only numeric input
-                    }}
-                    contentEditable = {answer.isEditable}
-                    onBlur={(e) => handleChange(studentIndex, questionIndex, e.target.innerText)}
-                    suppressContentEditableWarning={true}
-                    style={{ backgroundColor: answer.isEditable ? "white" : "#f0f0f0",
-                              cursor: answer.isEditable ? "text" : "not-allowed",
-                            }}
-                  >
-                    {answer.acquiredMark}
-                  </TableCell>
-                ))}
-              </TableRow>
+      <TableBody>
+        {studentsData.map((student, studentIndex) => (
+          <TableRow key={studentIndex}>
+            {/* Sticky Student Name column */}
+            <TableCell
+              style={{
+                position: 'sticky',
+                left: 0, // Sticky left
+                backgroundColor: '#fff', // Match row background color
+                zIndex: 1,
+              }}
+            >
+              {student.name}
+            </TableCell>
+            {student.answers.map((answer, questionIndex) => (
+              <TableCell
+                key={questionIndex}
+                onInput={(e) => {
+                  e.target.innerText = e.target.innerText.replace(/[^0-9]/g, ''); // Only numeric input
+                }}
+                contentEditable={answer.isEditable}
+                onBlur={(e) =>
+                  handleChange(studentIndex, questionIndex, e.target.innerText)
+                }
+                suppressContentEditableWarning={true}
+                style={{
+                  backgroundColor: answer.isEditable ? 'white' : '#f0f0f0',
+                  cursor: answer.isEditable ? 'text' : 'not-allowed',
+                }}
+              >
+                {answer.acquiredMark}
+              </TableCell>
             ))}
-          </TableBody>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </TableContainer>
+  <Button onClick={handleSubmit}>Submit</Button>
+</Paper>
 
-        </Table>
-      </TableContainer>
-    </Paper>
-
-    <Button onClick={handleSubmit}>Submit</Button>
     </>
   );
 };
