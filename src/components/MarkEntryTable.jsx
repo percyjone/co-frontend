@@ -12,7 +12,7 @@ import {
 import { useState } from 'react';
 import { questions, students } from "../markEntryTableInput.js";
 
-const NestedMarkEntryTable = () => {
+const QuestionMarkEntryTable = () => {
   
   const maxQuestionNumber = Math.max(...questions.map(q => parseInt(q.no, 10)));
 
@@ -43,7 +43,8 @@ const NestedMarkEntryTable = () => {
         questionID: question.id,
         questionNo: (question.no+question.option).trim(),   
         isEditable: true,       
-        acquiredMark: ""           
+        acquiredMark: "",
+        totalMark: question.marks        
       }))
     }))
   );
@@ -171,8 +172,8 @@ const NestedMarkEntryTable = () => {
             style={{
               backgroundColor: '#F8F9FA',
               position: 'sticky',
-              top: 72, // Adjust top for multi-row headers
-              left: 0, // Sticky left for the first column
+              top: 72, 
+              left: 0, 
               zIndex: 2,
             }}
           />
@@ -191,6 +192,10 @@ const NestedMarkEntryTable = () => {
                 colSpan={1}
               >
                 {'i'.repeat(subDivision)}
+                <br/>
+                <span style={{ fontSize: '0.8em' }}>
+                  ({questions[index].marks}m)
+                </span>
               </TableCell>
             ) : (
               <TableCell
@@ -200,7 +205,12 @@ const NestedMarkEntryTable = () => {
                   top: 72,
                   zIndex: 1,
                 }}
-              />
+              >
+              <br/>
+                <span style={{ fontSize: '0.8em' }}>
+                  ({questions[index].marks}m)
+                </span>
+              </TableCell>
             )
           )}
         </TableRow>
@@ -213,8 +223,8 @@ const NestedMarkEntryTable = () => {
             <TableCell
               style={{
                 position: 'sticky',
-                left: 0, // Sticky left
-                backgroundColor: '#fff', // Match row background color
+                left: 0,
+                backgroundColor: '#f9fcfc',
                 zIndex: 1,
               }}
             >
@@ -224,15 +234,29 @@ const NestedMarkEntryTable = () => {
               <TableCell
                 key={questionIndex}
                 onInput={(e) => {
+                  const selection = window.getSelection();
+                  const range = selection.getRangeAt(0);
+
+                  const caretPosition = range.endOffset; // Save caret position
                   e.target.innerText = e.target.innerText.replace(/[^0-9]/g, ''); // Only numeric input
+
+                  // Restore the caret position
+                  range.setStart(e.target.firstChild || e.target, caretPosition);
+                  range.setEnd(e.target.firstChild || e.target, caretPosition);
+                  selection.removeAllRanges();
+                  selection.addRange(range);
                 }}
                 contentEditable={answer.isEditable}
-                onBlur={(e) =>
-                  handleChange(studentIndex, questionIndex, e.target.innerText)
-                }
+                onBlur={(e) => {
+                  const enteredValue = parseInt(e.target.innerText, 10);
+                  if (enteredValue > answer.totalMark) {
+                    e.target.innerText = answer.totalMark;
+                  }
+                  handleChange(studentIndex, questionIndex, e.target.innerText);
+                }}
                 suppressContentEditableWarning={true}
                 style={{
-                  backgroundColor: answer.isEditable ? 'white' : '#f0f0f0',
+                  backgroundColor: answer.isEditable ? '#FFFFFF' : '#ededed',
                   cursor: answer.isEditable ? 'text' : 'not-allowed',
                 }}
               >
@@ -251,4 +275,4 @@ const NestedMarkEntryTable = () => {
   );
 };
 
-export default NestedMarkEntryTable;
+export default QuestionMarkEntryTable;
