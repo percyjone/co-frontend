@@ -44,10 +44,14 @@ const QuestionMarkEntryTable = ({ questions }) => {
         questionNo: (question.no+question.option).trim(),   
         isEditable: true,       
         acquiredMark: "",
-        totalMark: question.marks        
+        totalMark: question.marks,
+        questionCo: question.co        
       }))
     }))
   );
+
+  console.log(studentsData);
+  console.log(questions);
 
   const handleChange = (studentIndex, questionIndex, newValue) => {
     setStudentsData((prevData) => {
@@ -142,6 +146,7 @@ const QuestionMarkEntryTable = ({ questions }) => {
             typeof value === 'string' ? (
               <TableCell
                 style={{
+                  key: index,
                   backgroundColor: '#F8F9FA',
                   position: 'sticky',
                   top: 36,
@@ -155,6 +160,7 @@ const QuestionMarkEntryTable = ({ questions }) => {
               </TableCell>
             ) : (
               <TableCell
+                key={index}
                 style={{
                   backgroundColor: '#F8F9FA',
                   position: 'sticky',
@@ -199,6 +205,7 @@ const QuestionMarkEntryTable = ({ questions }) => {
               </TableCell>
             ) : (
               <TableCell
+                key={index}
                 style={{
                   backgroundColor: '#F8F9FA',
                   position: 'sticky',

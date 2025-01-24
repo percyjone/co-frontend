@@ -1,5 +1,5 @@
   // Sample data
-export const questions = [{
+ const q = [{
     "pi": "1.3.1",
     "co": "3",
     "bl": "2",
@@ -240,6 +240,11 @@ export const questions = [{
         "no": "16"
     }
   ];
+
+  export const questions = q.map((question,i) => ({
+    id: i+1,
+    ...question
+}));
 
 
   export const students =[
