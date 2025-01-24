@@ -12,7 +12,7 @@ import {
 import { useState } from 'react';
 import { questions, students } from "../markEntryTableInput.js";
 
-const QuestionMarkEntryTable = () => {
+const QuestionMarkEntryTable = ({ questions }) => {
   
   const maxQuestionNumber = Math.max(...questions.map(q => parseInt(q.no, 10)));
 

@@ -1,15 +1,12 @@
 import React, { useState,useEffect } from "react";
 import "./App.css";
-import Table from "./components/QuestionMapTable.jsx";
-import MarkEntryTable from "./components/MarkEntryTable.jsx";
-import Selection from "./components/Selection.jsx";
+import UploadQuestionPaper from "./pages/UploadQuestionPaper.jsx";
 
 const App = () => {
   return (
     <div className="App">
-      <h1>Table</h1>
-      <Selection />
-      <MarkEntryTable />
+      <h1>Student Mark Visualization</h1>
+      <UploadQuestionPaper/>
     </div>
   );
 };

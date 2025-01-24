@@ -1,0 +1,30 @@
+import api from './api.js';
+
+export const getStudents = async () => {
+    const response = await api.get("/students");
+    return response.data;
+};
+
+export const getAllSubjects = async () =>{
+    const responce = await api.get("/subjects")
+    return responce.data;
+};
+
+export const getExamQuestions = async (subject, exam) => {
+    const response = await api.get(`/questionpaper/examQuestions/${subject}/${exam.examName}/${exam.year}/${exam.semester}`);
+    return response.data;
+};
+
+export const uploadQuestionPaper = async (file) => {
+   const response=  await api.post('/questionpaper/upload', file, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+}
+
+export const createQuestions = async (subject,questionList,exam) => {
+  const response = await api.post('/questionpaper/create', {subject,questionList,exam})
+  return response.data;
+}

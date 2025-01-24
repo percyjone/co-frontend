@@ -2,20 +2,23 @@ import React, { useState,useEffect } from "react";
 import sampleInput from "../sampleInput.js";
 import "./QuestionMapTable.css";
 
-const Table = () => {
+const QuestionMapTable = ({questions=[],correctedQuestions,canSave}) => {
+  //  console.log("data from table:",data);
     const [rowCount,setRowCount] = useState(0);
     const [rows, setRows] = useState([]);
     const [isEditingMode, setIsEditingMode] = useState(false);
-    
+    const [showSaveButton, setShowSaveButton] = useState(canSave);
+
+
       useEffect(() => {
-        const initializedRows = sampleInput.map((row, index) => ({
+        const initializedRows = questions.map((row, index) => ({
           ...row,
           isEditable: false,
           id: index + 1, // Use the index to generate unique IDs
         })
       );
         setRows(initializedRows);
-        setRowCount(sampleInput.length + 1); // Set the ID to the next available number
+        setRowCount(questions.length + 1); // Set the ID to the next available number
       }, []);
       
     
@@ -67,13 +70,17 @@ const Table = () => {
     
       // Save the table data 
       const handleSave = () => {
+        setShowSaveButton(false);
         // Save the data to the backend
+        if (correctedQuestions) {
+          correctedQuestions(rows); // Sends data to the parent component
+        }
         console.log("Saved data:", rows);
         setIsEditingMode(false);
       };
     
       return (
-        <div className="container">
+        <div className="container">        
           <h1>Map Questions</h1>
     
           {/* Form Section */}
@@ -88,6 +95,8 @@ const Table = () => {
           </div>
     
           {/* Table Section */}
+          {rows.length > 0 ? (
+            <div>
           <table>
             <thead>
               <tr>
@@ -134,13 +143,13 @@ const Table = () => {
                     {row.isEditable ? (
                       <input
                         type="text"
-                        value={row.subdivision}
+                        value={row.subDivision}
                         onChange={(e) =>
-                          handleInputChange(row.id, "subdivision", e.target.value)
+                          handleInputChange(row.id, "subDivision", e.target.value)
                         }
                       />
                     ) : (
-                      row.subdivision
+                      row.subDivision
                     )}
                   </td>
                   <td>
@@ -221,24 +230,36 @@ const Table = () => {
           </table>
     
           {/* Edit Button Section */}
-          <div className="edit-controls">
-          {!isEditingMode && (
-            <button className="edit-button" onClick={toggleEditMode}>
-              Edit
-            </button>
-          )}
-            <button className="edit-button" onClick={handleSave} >
-              Save
-            </button>
-            {/* Add Row Button, Always Visible Outside the Table */}
-            {isEditingMode && (
-              <button className="add-icon" onClick={handleAddRow}>
-                ➕
-              </button>
+          {showSaveButton && (
+              <div className="edit-controls">
+              {!isEditingMode && (
+                <button className="edit-button" onClick={toggleEditMode}>
+                  Edit
+                </button>
+              )}
+                <button className="edit-button" onClick={handleSave} >
+                  Save
+                </button>
+                {/* Add Row Button, Always Visible Outside the Table */}
+                {isEditingMode && (
+                  <button className="add-icon" onClick={handleAddRow}>
+                    ➕
+                  </button>
+                )}
+              </div>
+           )}
+
+
+          </div>) : 
+          (
+            <div>
+            <p>No data available.</p>
+            <button>Upload question paper</button>
+            </div>
             )}
-          </div>
+        
         </div>
       );
 };
 
-export default Table;
+export default QuestionMapTable;
