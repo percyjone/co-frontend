@@ -10,9 +10,8 @@ import {
   Button,
 } from "@mui/material";
 import { useState } from 'react';
-import { questions, students } from "../markEntryTableInput.js";
 
-const QuestionMarkEntryTable = ({ questions }) => {
+const QuestionMarkEntryTable = ({ questions, studentsQuestionsData }) => {
   
   const maxQuestionNumber = Math.max(...questions.map(q => parseInt(q.no, 10)));
 
@@ -35,20 +34,7 @@ const QuestionMarkEntryTable = ({ questions }) => {
     return acc;
   }, []);
 
-  const [studentsData, setStudentsData] = useState(
-    students.map(student => ({
-      id: student.id,
-      name: student.name,
-      answers: questions.map((question, index) => ({
-        questionID: question.id,
-        questionNo: (question.no+question.option).trim(),   
-        isEditable: true,       
-        acquiredMark: "",
-        totalMark: question.marks,
-        questionCo: question.co        
-      }))
-    }))
-  );
+  const [studentsData, setStudentsData] = useState(studentsQuestionsData);
 
   console.log(studentsData);
   console.log(questions);
@@ -89,7 +75,32 @@ const QuestionMarkEntryTable = ({ questions }) => {
   
 
   const handleSubmit = () =>{
-    console.log(studentsData);
+    setStudentsData((prevData) => {
+      return prevData.map(student => {
+        student.answers.forEach(answer => {
+          if (!answer.isEditable) {
+            answer.acquiredMark = null;
+          }
+        });
+        return student;
+      });
+    });
+
+    setStudentsData((prevData) => {
+      return prevData.map(student => ({
+        id: student.id,
+        name: student.name,
+        answers: student.answers.map(answer => ({
+          questionID: answer.questionID,
+          questionNo: answer.questionNo,
+          acquiredMark: answer.acquiredMark,
+          totalMark: answer.totalMark,
+          questionCo: answer.questionCo
+        }))
+      }));
+    
+  })
+  console.log(studentsData);
   }
 
   return (

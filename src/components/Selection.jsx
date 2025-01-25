@@ -11,16 +11,18 @@ const SelectionComponent = ({ context, onSubmit }) => {
     subject: '',
     examName: '',
     semester: '',
-    examYear: ''
+    examYear: '',
+    dept: '',
   });
 
   const [options, setOptions] = useState({
-    year: [1,2,3,4],
+    year: ['I','II','III','IV'],
     sec: ['A', 'B', 'C', 'D'],
     subject: [],
     examName: ['SerialTest1', 'SerialTest2', 'SerialTest3', 'oddSem', 'evenSem'],
     semester: [1,2,3,4,5,6,7,8],
-    examYear: ['2024', '2025']
+    examYear: ['2024', '2025'],
+    dept: ['CSE', 'IT', 'ECE', 'EEE']
   });
 
   useEffect(() => {
@@ -58,6 +60,7 @@ const SelectionComponent = ({ context, onSubmit }) => {
     markEntryPage: [
       { label: 'Year', name: 'year' },
       { label: 'Section', name: 'sec' },
+      { label: 'Dept', name: 'dept'},
     ],
     questionPaperEntry: [
       { label: 'Subject', name: 'subject' },

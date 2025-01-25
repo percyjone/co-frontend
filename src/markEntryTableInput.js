@@ -409,3 +409,207 @@
         "department": "CSE"
     }
 ];
+
+
+export const studentQuestionData =[
+    {
+      "id": "cm60ljvpb0000d8xg6560rfkr",
+      "name": "John Doe",
+      "answers": [
+        {
+          "questionID": 1,
+          "questionNo": "1null",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "2",
+          "questionCo": "CO1"
+        },
+        {
+          "questionID": 2,
+          "questionNo": "2null",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "2",
+          "questionCo": "CO2"
+        },
+        {
+          "questionID": 3,
+          "questionNo": "3null",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "2",
+          "questionCo": "CO3"
+        },
+        {
+          "questionID": 4,
+          "questionNo": "4null",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "2",
+          "questionCo": "CO4"
+        },
+        {
+          "questionID": 5,
+          "questionNo": "5null",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "2",
+          "questionCo": "CO5"
+        },
+        {
+          "questionID": 6,
+          "questionNo": "6null",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "2",
+          "questionCo": "CO6"
+        },
+        {
+          "questionID": 7,
+          "questionNo": "7null",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "2",
+          "questionCo": "CO7"
+        },
+        {
+          "questionID": 8,
+          "questionNo": "8null",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "2",
+          "questionCo": "CO8"
+        },
+        {
+          "questionID": 9,
+          "questionNo": "9null",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "2",
+          "questionCo": "CO9"
+        },
+        {
+          "questionID": 10,
+          "questionNo": "10null",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "2",
+          "questionCo": "CO10"
+        },
+        {
+          "questionID": 11,
+          "questionNo": "11A",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "13",
+          "questionCo": "CO11"
+        },
+        {
+          "questionID": 12,
+          "questionNo": "11B",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "13",
+          "questionCo": "CO12"
+        },
+        {
+          "questionID": 13,
+          "questionNo": "12A",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "13",
+          "questionCo": "CO13"
+        },
+        {
+          "questionID": 14,
+          "questionNo": "12B",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "13",
+          "questionCo": "CO14"
+        },
+        {
+          "questionID": 15,
+          "questionNo": "13A",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "7",
+          "questionCo": "CO15"
+        },
+        {
+          "questionID": 16,
+          "questionNo": "13A",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "6",
+          "questionCo": "CO16"
+        },
+        {
+          "questionID": 17,
+          "questionNo": "13B",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "7",
+          "questionCo": "CO17"
+        },
+        {
+          "questionID": 18,
+          "questionNo": "13B",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "6",
+          "questionCo": "CO18"
+        },
+        {
+          "questionID": 19,
+          "questionNo": "14A",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "13",
+          "questionCo": "CO19"
+        },
+        {
+          "questionID": 20,
+          "questionNo": "14B",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "13",
+          "questionCo": "CO20"
+        },
+        {
+          "questionID": 21,
+          "questionNo": "15A",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "13",
+          "questionCo": "CO21"
+        },
+        {
+          "questionID": 22,
+          "questionNo": "15B",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "13",
+          "questionCo": "CO22"
+        },
+        {
+          "questionID": 23,
+          "questionNo": "16A",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "7",
+          "questionCo": "CO23"
+        },
+        {
+          "questionID": 24,
+          "questionNo": "16A",
+          "isEditable": true,
+          "acquiredMark": "",
+          "totalMark": "8",
+          "questionCo": "CO24"
+        }
+      ]
+    }
+]
+
+  
