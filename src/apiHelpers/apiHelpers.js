@@ -28,3 +28,13 @@ export const createQuestions = async (subject,questionList,exam) => {
   const response = await api.post('/questionpaper/create', {subject,questionList,exam})
   return response.data;
 }
+
+export const getStudentsByYearSecAndDept = async (year, sec, dept) => {
+  const response = await api.get(`/students/${year}/${sec}/${dept}`);
+  return response.data;
+}
+
+export const getStudentQuestionMarksByStudentIdQuestionId = async (studentId, questionId) => {
+  const response = await api.get(`/studentQuestionMarks/${studentId}/${questionId}`);
+  return response.data;
+}
