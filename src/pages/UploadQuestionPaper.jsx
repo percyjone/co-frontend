@@ -5,6 +5,10 @@ import { getExamQuestions } from '../apiHelpers/apiHelpers';
 import QuestionMarkEntryTable from '../components/QuestionMarkEntryTable.jsx';
 import { Button } from '@mui/material';
 import UploadQP from '../components/UploadQP.jsx';
+import CircularProgress from '@mui/material/CircularProgress';
+import { Box, Typography } from '@mui/material';
+
+
 
 
 const UploadQuestionPaper = () => {
@@ -70,16 +74,55 @@ const UploadQuestionPaper = () => {
       {!showQuestionSelection && (
         <>
         {/* To write styling to loading component */}
-          {loading ? (
-            <div>Loading questions...</div>
-          ) : questions.length === 0 ? (
-            <>
+        
+        {loading ? (
+  <div
+    style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '200px',
+      width: '100%',
+           }}
+  >
+                <CircularProgress />
+           </div>
+        )
+        :questions.length === 0 ? (
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            minHeight="20vh"
+            textAlign="center"
+            sx={{ p: 2 }}
+          >
             {/* To write styling to questions not found component */}
-              No Questions Found for {selectionData.subject} {selectionData.examName}{' '}
-              {selectionData.examYear} {selectionData.semester}
-              <UploadQP subjectCode={selectionData.subject} examName={selectionData.examName} examYear={selectionData.examYear} semester={selectionData.semester}/>
-            </>
-          ) : (
+            <Typography variant="h6" gutterBottom>
+  No questions available for <br />{' '}
+  <Typography component="span" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>
+    {selectionData.subject}
+  </Typography>{' '}
+  -{' '}
+  <Typography component="span" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>
+    {selectionData.examName}
+  </Typography>{' '}
+  (
+  <Typography component="span" sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
+    {selectionData.examYear} - {selectionData.semester} Semester
+  </Typography>
+  ) 
+</Typography>
+
+            <UploadQP 
+              subjectCode={selectionData.subject} 
+              examName={selectionData.examName} 
+              examYear={selectionData.examYear} 
+              semester={selectionData.semester} 
+            />
+          </Box>
+        ) : (
             <>
               {showStudentSelection && (
                 <SelectionComponent context="markEntryPage" onSubmit={handleStudentClassSubmit} />
