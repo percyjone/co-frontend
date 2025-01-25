@@ -6,15 +6,17 @@ import QuestionMarkEntryTable from "./components/QuestionMarkEntryTable.jsx";
 import { questions } from "./markEntryTableInput.js";
 // import Auth from "./components/Auth.jsx";
 import Home from "./pages/Home.jsx";
-
+import UploadQP from "./components/UploadQP.jsx";
 const App = () => {
   return (
     <div className="App">
-      {/* <h1>Student Mark Visualization</h1> */}
+      <h1>Student Mark Visualization</h1>
       {/* <QuestionMarkEntryTable questions={questions}/>
       <Auth/> */}
+      
+      {/* <Home/> */}
+      <UploadQP/>
       {/* <UploadQuestionPaper/> */}
-      <Home/>
     </div>
   );
 };

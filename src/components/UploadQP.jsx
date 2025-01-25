@@ -63,6 +63,17 @@ const UploadQP = ({subjectCode,examName,examYear,semester}) => {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+      <Box display="flex"
+    flexDirection="column"
+    alignItems="center"
+    gap={2}
+    p={3}
+    border="1px solid #ccc"
+    borderRadius="8px"
+    boxShadow="0px 4px 10px rgba(0, 0, 0, 0.1)"
+    width="50%"
+    maxWidth="400px"
+  >
       <Typography variant="h5">Upload a .docx File</Typography>
       <input
         type="file"
@@ -85,6 +96,7 @@ const UploadQP = ({subjectCode,examName,examYear,semester}) => {
       >
         Upload
       </Button>
+      </Box>
       {uploadStatus && <Typography color="error">{uploadStatus}</Typography>}
       {uploadStatus.includes('Upload successful') && (
           <QuestionMapTable questions={parsedQuestions} correctedQuestions={pushQuestions} canSave={true}/>
