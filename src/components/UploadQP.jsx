@@ -49,7 +49,7 @@ const UploadQP = ({subjectCode,examName,examYear,semester}) => {
     if (correctedQuestions.length > 0) {
       console.log('send questions to server');
       const exam = {name:examName,year:parseInt(examYear),semester:parseInt(semester)};
-
+      
       createQuestions(subjectCode,correctedQuestions,exam)
         .then((response) => {
           setQuestionCreationStatus('Questions uploaded successfully');

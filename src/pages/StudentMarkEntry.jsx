@@ -1,20 +1,20 @@
 import React,{useEffect, useState} from 'react'
 import SelectionComponent from '../components/Selection';
 import {getExamQuestions,getStudentsByYearSecAndDept,getStudentQuestionMarksByStudentIdQuestionId} from '../apiHelpers/apiHelpers';
-import { questions } from '../markEntryTableInput';
+// import { questions } from '../markEntryTableInput';
 import QuestionMarkEntryTable from '../components/QuestionMarkEntryTable.jsx';
 
 const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
 
-    //const [questions, setQuestions] = useState([]);
+    const [questions, setQuestions] = useState([]);
     const [students, setStudents] = useState([]);
     const [studentData, setStudentData] = useState([]);
 
     const [selectionData, setSelectionData] = useState({
-        subject: subject,
-        examName: examName,
-        examYear: examYear,
-        semester: semester,
+        subject: subject ? subject : "",
+        examName: examName ? examName : "",
+        examYear: examYear ? examYear : "",
+        semester: semester ? semester : "",
         year: '',
         sec:'',
         dept:'',
@@ -46,7 +46,7 @@ const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
         };
         getExamQuestions(data.subject, data.exam)
           .then((response) => {
-            //setQuestions(response);
+            setQuestions(response);
             console.log("Questions:",response);
           })
           .catch((error) => {
@@ -77,24 +77,30 @@ const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
 
     useEffect(() => {
         if (questions.length > 0 && students.length > 0) {
-          // Fetch data from the DB for all student-question combinations
-          const studentQuestionMarksPromises = students.map(student =>
+          // Prepare an array of promises
+          const studentQuestionMarksPromises = students.flatMap(student =>
             questions.map(question =>
               getStudentQuestionMarksByStudentIdQuestionId(student.id, question.id)
                 .then(response => ({
                   studentId: student.id,
                   questionId: question.id,
-                  acquiredMarks: response.marks || '', // Use DB data if available
+                  acquiredMarks: response?.mark || '', // Use mark if present, default to ''
+                }))
+                .catch(() => ({
+                  studentId: student.id,
+                  questionId: question.id,
+                  acquiredMarks: '', // Default to empty on error
                 }))
             )
           );
       
-          Promise.all(studentQuestionMarksPromises.flat())
+          // Resolve all promises and process data
+          Promise.all(studentQuestionMarksPromises)
             .then(fetchedData => {
               // Map students to include name, ID, and answers array
               const mappedData = students.map(student => ({
                 studentId: student.id,
-                studentName: student.name,
+                name: student.name,
                 answers: questions.map(question => {
                   // Find DB data for this student and question
                   const existingEntry = fetchedData.find(
@@ -105,11 +111,11 @@ const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
       
                   // Merge existing data if available, otherwise initialize defaults
                   return {
-                    questionID: question.id,
-                    questionNo: (question.no + question.option).trim(),
-                    acquiredMark: existingEntry?.marks || '',
+                    questionId: question.id,
+                    questionNo: String(question.no) + question.option,
+                    acquiredMark: existingEntry?.acquiredMarks || '',
                     totalMark: question.marks,
-                    questionCo: question.co,
+                    questionCo: question.coId,
                     isEditable: true,
                   };
                 }),
@@ -122,6 +128,7 @@ const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
             });
         }
       }, [questions, students]);
+      
 
 
     console.log(selectionData);

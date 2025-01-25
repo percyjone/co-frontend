@@ -36,5 +36,11 @@ export const getStudentsByYearSecAndDept = async (year, sec, dept) => {
 
 export const getStudentQuestionMarksByStudentIdQuestionId = async (studentId, questionId) => {
   const response = await api.get(`/studentQuestionMarks/${studentId}/${questionId}`);
+  console.log("from api:",response.data);
+  return response.data;
+}
+
+export const createStudentsQuestionsMark = async (data) => {
+  const response = await api.post('/studentQuestionMarks/create', data);
   return response.data;
 }

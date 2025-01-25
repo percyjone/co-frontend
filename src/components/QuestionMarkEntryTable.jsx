@@ -10,6 +10,7 @@ import {
   Button,
 } from "@mui/material";
 import { useState } from 'react';
+import {createStudentsQuestionsMark} from "../apiHelpers/apiHelpers";
 
 const QuestionMarkEntryTable = ({ questions, studentsQuestionsData }) => {
   
@@ -36,7 +37,7 @@ const QuestionMarkEntryTable = ({ questions, studentsQuestionsData }) => {
 
   const [studentsData, setStudentsData] = useState(studentsQuestionsData);
 
-  console.log(studentsData);
+  console.log("Student data",studentsData);
   console.log(questions);
 
   const handleChange = (studentIndex, questionIndex, newValue) => {
@@ -86,21 +87,28 @@ const QuestionMarkEntryTable = ({ questions, studentsQuestionsData }) => {
       });
     });
 
-    setStudentsData((prevData) => {
-      return prevData.map(student => ({
-        id: student.id,
-        name: student.name,
-        answers: student.answers.map(answer => ({
-          questionID: answer.questionID,
-          questionNo: answer.questionNo,
-          acquiredMark: answer.acquiredMark,
-          totalMark: answer.totalMark,
-          questionCo: answer.questionCo
-        }))
-      }));
-    
-  })
-  console.log(studentsData);
+    const newStudentsData = studentsData.map(student => ({
+      studentId: student.studentId,
+      name: student.name,
+      answers: student.answers.map(answer => ({
+        questionId: answer.questionId,
+        questionNo: answer.questionNo,
+        acquiredMark: answer.acquiredMark,
+        totalMark: answer.totalMark,
+        questionCo: answer.questionCo
+      }))
+    }));
+
+    setStudentsData(newStudentsData);
+
+    createStudentsQuestionsMark(newStudentsData)
+      .then((res) => {
+        console.log(res);
+      }).catch((err) => {
+        console.error(err);
+      });
+
+  console.log("Submitted students data",studentsData);
   }
 
   return (
