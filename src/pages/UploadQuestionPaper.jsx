@@ -106,8 +106,8 @@ const UploadQuestionPaper = () => {
             flexDirection="column"
             alignItems="center"
             justifyContent="center"
-            minHeight="20vh"
             textAlign="center"
+    
             sx={{ p: 2 }}
           >
             {/* To write styling to questions not found component */}
@@ -126,20 +126,26 @@ const UploadQuestionPaper = () => {
   </Typography>
   ) 
 </Typography>
-
+<Box 
+width="100vh">
             <UploadQP 
               subjectCode={selectionData.subject} 
               examName={selectionData.examName} 
               examYear={selectionData.examYear} 
               semester={selectionData.semester} 
             />
+</Box>
           </Box>
         ) : (
             <> 
                 <>
                   {/*To write Collapsible component to show questionMapTable */}
-                  <QuestionMapTable canSave={false} questions={questions}  />                
-                  <Button onClick={() => navigate('/studentMarkEntry')}>Go to mark entry page</Button>  
+                  <Box padding={5}>
+                  <QuestionMapTable canSave={false} questions={questions}  /> 
+                  <Box sx={{ display: 'flex', justifyContent: 'center', mt:2 }}>             
+                  <Button  variant="contained" onClick={() => navigate('/studentMarkEntry')}>Go to mark entry page</Button>  
+                  </Box>
+                  </Box>
                 </>
             </>
           )}

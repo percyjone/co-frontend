@@ -2,12 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Button, Box, Typography } from '@mui/material';
 import { uploadQuestionPaper,createQuestions } from '../apiHelpers/apiHelpers';
 import QuestionMapTable from './QuestionMapTable';
-import { useNavigate } from "react-router-dom";
-
 
 const UploadQP = ({subjectCode,examName,examYear,semester}) => {
-  const navigate = useNavigate();
-
   const [file, setFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState('');
   const [parsedQuestions, setParsedQuestions] = useState([]);
@@ -53,7 +49,7 @@ const UploadQP = ({subjectCode,examName,examYear,semester}) => {
     if (correctedQuestions.length > 0) {
       console.log('send questions to server');
       const exam = {name:examName,year:parseInt(examYear),semester:parseInt(semester)};
-      
+
       createQuestions(subjectCode,correctedQuestions,exam)
         .then((response) => {
           setQuestionCreationStatus('Questions uploaded successfully');
@@ -76,7 +72,7 @@ const UploadQP = ({subjectCode,examName,examYear,semester}) => {
     borderRadius="8px"
     boxShadow="0px 4px 10px rgba(0, 0, 0, 0.1)"
     width="50%"
-    maxWidth="400px"
+    maxWidth="500px"
   >
       <Typography variant="h5">Upload a .docx File</Typography>
       <input
@@ -108,9 +104,7 @@ const UploadQP = ({subjectCode,examName,examYear,semester}) => {
       {questionCreationStatus === 'Questions uploaded successfully' && (
         <div>
           <Typography variant="h6" color="success">
-            <Button variant="contained" color="success" onClick={() => navigate('/studentMarkEntry')} >
-                Go to Mark entry Page
-            </Button>
+            Go to Mark entry Page
           </Typography>
         </div>
       )}

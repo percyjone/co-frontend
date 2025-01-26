@@ -20,6 +20,7 @@ const App = () => {
         <Route path="/studentMarkEntry" element={<StudentMarkEntry subject="" examName="" examYear="" semester=""/>} />
       </Routes>
     </div>
+    
     </Router>
   );
 };
