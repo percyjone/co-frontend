@@ -14,18 +14,11 @@ const App = () => {
     <Router>
     <div className="App">
       <h1>Student Mark Visualization</h1>
-      <a href="/upload">Upload a question paper</a>
-      <a href="/studentMarkEntry">Student Mark Entry</a>
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/upload" element={<UploadQuestionPaper />} />
         <Route path="/studentMarkEntry" element={<StudentMarkEntry subject="" examName="" examYear="" semester=""/>} />
       </Routes>
-      {/* <QuestionMarkEntryTable questions={questions}/>
-      <Auth/> */}
-      
-      {/* <Home/> */}
-      <UploadQP/>
-      {/* <UploadQuestionPaper/> */}
     </div>
     </Router>
   );

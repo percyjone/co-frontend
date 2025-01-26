@@ -2,8 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Button, Box, Typography } from '@mui/material';
 import { uploadQuestionPaper,createQuestions } from '../apiHelpers/apiHelpers';
 import QuestionMapTable from './QuestionMapTable';
+import { useNavigate } from "react-router-dom";
+
 
 const UploadQP = ({subjectCode,examName,examYear,semester}) => {
+  const navigate = useNavigate();
+
   const [file, setFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState('');
   const [parsedQuestions, setParsedQuestions] = useState([]);
@@ -104,7 +108,9 @@ const UploadQP = ({subjectCode,examName,examYear,semester}) => {
       {questionCreationStatus === 'Questions uploaded successfully' && (
         <div>
           <Typography variant="h6" color="success">
-            Go to Mark entry Page
+            <Button variant="contained" color="success" onClick={() => navigate('/studentMarkEntry')} >
+                Go to Mark entry Page
+            </Button>
           </Typography>
         </div>
       )}

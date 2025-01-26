@@ -1,6 +1,19 @@
 import React from "react"
 import { Button, Box } from '@mui/material';
+import { useNavigate } from "react-router-dom";
+
 const Home = () => {
+
+  const navigate = useNavigate();
+  const handleUpload = () => {
+    navigate('/upload');
+  }
+
+  const handleStudentMarkEntry = () => {
+    navigate('/studentMarkEntry');
+  }
+
+
 
     return (
         <Box
@@ -8,13 +21,13 @@ const Home = () => {
         flexDirection="column"
         justifyContent="center" 
         alignItems="center" 
-        height="100vh" 
+        height="50vh" 
         gap={2} 
       >
-        <Button variant="contained" >
+        <Button onClick={handleUpload}  variant="contained" >
           Upload QuestionPaper
         </Button>
-        <Button variant="contained">
+        <Button onClick={handleStudentMarkEntry} variant="contained">
           Student mark entry
         </Button>
       </Box>

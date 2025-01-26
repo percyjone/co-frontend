@@ -7,11 +7,13 @@ import { Button } from '@mui/material';
 import UploadQP from '../components/UploadQP.jsx';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 
 
 
 const UploadQuestionPaper = () => {
+  const navigate = useNavigate();
   const [selectionData, setSelectionData] = useState({
     subject: '',
     examName: '',
@@ -56,7 +58,17 @@ const UploadQuestionPaper = () => {
   
     getExamQuestions(data.subjectName, data.exam)
       .then((response) => {
-        setQuestions(response);
+        const formattedQuestions = response.map((q) => ({
+          id: q.id,
+          no: q.no,
+          option: q.option || "",
+          subDivision: q.subDivision,
+          question: q.text,
+          marks: q.marks,
+          co: q.coId || null,
+          pi: q.pi || null,
+        }));
+        setQuestions(formattedQuestions);
       })
       .catch((error) => {
         console.error("Error fetching questions:", error);
@@ -123,17 +135,12 @@ const UploadQuestionPaper = () => {
             />
           </Box>
         ) : (
-            <>
-              {showStudentSelection && (
-                <SelectionComponent context="markEntryPage" onSubmit={handleStudentClassSubmit} />
-              )}
-              {!showStudentSelection && (
+            <> 
                 <>
                   {/*To write Collapsible component to show questionMapTable */}
-                  <QuestionMapTable canSave={false} questions={questions}  />
-                  <QuestionMarkEntryTable questions={questions} />
+                  <QuestionMapTable canSave={false} questions={questions}  />                
+                  <Button onClick={() => navigate('/studentMarkEntry')}>Go to mark entry page</Button>  
                 </>
-              )}
             </>
           )}
         </>

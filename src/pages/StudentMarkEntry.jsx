@@ -1,7 +1,6 @@
 import React,{useEffect, useState} from 'react'
 import SelectionComponent from '../components/Selection';
 import {getExamQuestions,getStudentsByYearSecAndDept,getStudentQuestionMarksByStudentIdQuestionId} from '../apiHelpers/apiHelpers';
-// import { questions } from '../markEntryTableInput';
 import QuestionMarkEntryTable from '../components/QuestionMarkEntryTable.jsx';
 
 const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
