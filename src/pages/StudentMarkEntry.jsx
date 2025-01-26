@@ -2,12 +2,17 @@ import React,{useEffect, useState} from 'react'
 import SelectionComponent from '../components/Selection';
 import {getExamQuestions,getStudentsByYearSecAndDept,getStudentQuestionMarksByStudentIdQuestionId} from '../apiHelpers/apiHelpers';
 import QuestionMarkEntryTable from '../components/QuestionMarkEntryTable.jsx';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
 
     const [questions, setQuestions] = useState([]);
     const [students, setStudents] = useState([]);
     const [studentData, setStudentData] = useState([]);
+    const [isExamtSelected, setIsExamSelected] = useState(false);
+    const [isStudentSelected, setIsStudentSelected] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const [selectionData, setSelectionData] = useState({
         subject: subject ? subject : "",
@@ -21,6 +26,7 @@ const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
 
       const handleExamDetails = (formData) => {
         setSelectionData(formData);
+        setIsExamSelected(true);
       }
     
       const handleStudentDetails = (formData) => {
@@ -30,6 +36,7 @@ const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
           sec: formData.sec,
           dept:formData.dept 
         }));
+        setIsStudentSelected(true);
       }
 
 
@@ -76,6 +83,7 @@ const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
 
     useEffect(() => {
         if (questions.length > 0 && students.length > 0) {
+          setLoading(true);
           // Prepare an array of promises
           const studentQuestionMarksPromises = students.flatMap(student =>
             questions.map(question =>
@@ -124,7 +132,10 @@ const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
             })
             .catch(error => {
               console.error('Error fetching student question marks:', error);
-            });
+            })
+            .finally(() => {
+              setLoading(false);
+            })
         }
       }, [questions, students]);
       
@@ -135,16 +146,25 @@ const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
 
   return (
     <div>
-    { subject === '' &&
+    { subject === '' && examName === '' && examYear === '' && semester === '' && !isExamtSelected &&
       <SelectionComponent context='questionPaperEntry' onSubmit={handleExamDetails}/>
     }
 
-    {questions.length > 0 &&
+    {questions.length > 0 && !isStudentSelected &&
       <div>
         <SelectionComponent context='markEntryPage' onSubmit={handleStudentDetails}/>
       </div>
     }
-
+    {loading &&  
+      <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '200px',
+          width: '100%',
+          }}>
+          <CircularProgress />
+      </div>}
     {studentData.length > 0 && questions.length > 0 && students.length > 0 &&
     <>
     <h1>{selectionData.examName} {selectionData.examYear} {selectionData.semester} {selectionData.subject}</h1>
