@@ -65,7 +65,7 @@ const UploadQuestionPaper = () => {
           subDivision: q.subDivision,
           question: q.text,
           marks: q.marks,
-          co: q.coId || null,
+          co: q.coName || null,
           pi: q.pi || null,
         }));
         setQuestions(formattedQuestions);
