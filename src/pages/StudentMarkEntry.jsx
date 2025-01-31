@@ -1,6 +1,6 @@
 import React,{useEffect, useState} from 'react'
 import SelectionComponent from '../components/Selection';
-import {getExamQuestions,getStudentsByYearSecAndDept,getStudentQuestionMarksByStudentIdQuestionId} from '../apiHelpers/apiHelpers';
+import {getExamQuestions,getStudentsByYearSecAndDept,getStudentQuestionMarksByStudentIdQuestionId, getStudents,getStudentsQuestionsMark} from '../apiHelpers/apiHelpers';
 import QuestionMarkEntryTable from '../components/QuestionMarkEntryTable.jsx';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -8,7 +8,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
 
     const [questions, setQuestions] = useState([]);
-    const [students, setStudents] = useState([]);
     const [studentData, setStudentData] = useState([]);
     const [isExamtSelected, setIsExamSelected] = useState(false);
     const [isStudentSelected, setIsStudentSelected] = useState(false);
@@ -40,6 +39,7 @@ const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
       }
 
 
+    //Fetch Questions
     useEffect(() => {
       if (selectionData.subject && selectionData.examName && selectionData.examYear && selectionData.semester) {
         const data = {
@@ -62,84 +62,71 @@ const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
         
     },[selectionData.examName,selectionData.examYear,selectionData.semester,selectionData.subject]);
 
+    //Fetch Students
     useEffect(() => {
-      if (selectionData.year && selectionData.sec && selectionData.dept) {
-        const data = {
+      if (questions.length === 0) return;
+    
+      setLoading(true);
+    
+      const inputData = {
+        exam: {
+          subjectCode: selectionData.subject,
+          examName: selectionData.examName,
+          year: parseInt(selectionData.examYear, 10), // Specify radix to ensure proper conversion
+          semester: parseInt(selectionData.semester, 10),
+        },
+        studentDetail: {
           year: selectionData.year,
           sec: selectionData.sec,
-          dept:selectionData.dept
-        };
-        getStudentsByYearSecAndDept(data.year, data.sec,data.dept)
-          .then((response) => {
-            setStudents(response);
-            console.log("Students:",response);
-          })
-          .catch((error) => {
-            console.error('Error fetching questions:', error);
+          dept: selectionData.dept,
+        },
+      };
+    
+      getStudentsQuestionsMark(inputData.exam, inputData.studentDetail)
+        .then(response => {
+          const updatedData = response.map(student => {
+            // Group questions by base number (e.g., "11" for "11A", "11B", etc.)
+            const questionGroups = student.answers.reduce((acc, answer) => {
+              const baseQuestionNo = answer.questionNo.replace(/[A-Z]$/, ""); // Extract base number
+              if (!acc[baseQuestionNo]) acc[baseQuestionNo] = [];
+              acc[baseQuestionNo].push(answer);
+              return acc;
+            }, {});
+    
+            // Apply rules within each group
+            Object.values(questionGroups).forEach(group => {
+              const answeredQuestions = group.filter(answer => answer.acquiredMark !== "");
+              
+              if (answeredQuestions.length > 0) {
+                // Create a Set of marked question numbers (e.g., "11A", "11B")
+                const markedQuestionTypes = new Set(answeredQuestions.map(answer => answer.questionNo));
+    
+                group.forEach(answer => {
+                  answer.isEditable = markedQuestionTypes.has(answer.questionNo); // Keep only marked types editable
+                });
+              } else {
+                // If no marks exist, all remain editable
+                group.forEach(answer => (answer.isEditable = true));
+              }
+            });
+    
+            return {
+              studentId: student.studentId,
+              name: student.name,
+              answers: student.answers,
+            };
           });
-        
-        }
-    },[selectionData.year,selectionData.sec,selectionData.dept]);
-
-    useEffect(() => {
-        if (questions.length > 0 && students.length > 0) {
-          setLoading(true);
-          // Prepare an array of promises
-          const studentQuestionMarksPromises = students.flatMap(student =>
-            questions.map(question =>
-              getStudentQuestionMarksByStudentIdQuestionId(student.id, question.id)
-                .then(response => ({
-                  studentId: student.id,
-                  questionId: question.id,
-                  acquiredMarks: response?.mark || '', // Use mark if present, default to ''
-                }))
-                .catch(() => ({
-                  studentId: student.id,
-                  questionId: question.id,
-                  acquiredMarks: '', // Default to empty on error
-                }))
-            )
-          );
-      
-          // Resolve all promises and process data
-          Promise.all(studentQuestionMarksPromises)
-            .then(fetchedData => {
-              // Map students to include name, ID, and answers array
-              const mappedData = students.map(student => ({
-                studentId: student.id,
-                name: student.name,
-                answers: questions.map(question => {
-                  // Find DB data for this student and question
-                  const existingEntry = fetchedData.find(
-                    entry =>
-                      entry.studentId === student.id &&
-                      entry.questionId === question.id
-                  );
-      
-                  // Merge existing data if available, otherwise initialize defaults
-                  return {
-                    questionId: question.id,
-                    questionNo: String(question.no) + question.option,
-                    acquiredMark: existingEntry?.acquiredMarks || '',
-                    totalMark: question.marks,
-                    questionCo: question.coId,
-                    isEditable: true,
-                  };
-                }),
-              }));
-      
-              setStudentData(mappedData);
-            })
-            .catch(error => {
-              console.error('Error fetching student question marks:', error);
-            })
-            .finally(() => {
-              setLoading(false);
-            })
-        }
-      }, [questions, students]);
-      
-
+    
+          setStudentData(updatedData);
+          console.log("Updated student data:", updatedData);
+        })
+        .catch(error => {
+          console.error("Error fetching student question marks:", error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }, [selectionData.year, selectionData.sec, selectionData.dept]);
 
     console.log(selectionData);
     console.log(studentData);
@@ -165,11 +152,11 @@ const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
           }}>
           <CircularProgress />
       </div>}
-    {studentData.length > 0 && questions.length > 0 && students.length > 0 &&
+    {studentData.length > 0 && questions.length > 0 &&
     <>
     <h1>{selectionData.examName} {selectionData.examYear} {selectionData.semester} {selectionData.subject}</h1>
     <h1>{selectionData.year} {selectionData.sec} {selectionData.dept}</h1>
-    <QuestionMarkEntryTable subject={selectionData.subject} questions={questions} students={students} studentsQuestionsData={studentData}/>
+    <QuestionMarkEntryTable subject={selectionData.subject} questions={questions} studentsQuestionsData={studentData}/>
     </>
     }
     </div>

@@ -44,3 +44,8 @@ export const createStudentsQuestionsMark = async (data) => {
   const response = await api.post('/studentQuestionMarks/create', data);
   return response.data;
 }
+
+export const getStudentsQuestionsMark = async (exam,studentDetail) => {
+  const response = await api.post('/studentQuestionMarks/getStudentsQuestionsMark', {exam,studentDetail});
+  return response.data;
+}
