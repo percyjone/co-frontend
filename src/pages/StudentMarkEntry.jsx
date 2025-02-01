@@ -42,6 +42,7 @@ const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
     //Fetch Questions
     useEffect(() => {
       if (selectionData.subject && selectionData.examName && selectionData.examYear && selectionData.semester) {
+        setLoading(true);
         const data = {
           subject: selectionData.subject,
           exam: {
@@ -57,6 +58,9 @@ const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
           })
           .catch((error) => {
             console.error('Error fetching questions:', error);
+          })
+          .finally(() => {
+            setLoading(false);
           });
         }
         

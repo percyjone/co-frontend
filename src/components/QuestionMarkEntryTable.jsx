@@ -11,8 +11,12 @@ import {
 } from "@mui/material";
 import { useState } from 'react';
 import {createStudentsQuestionsMark} from "../apiHelpers/apiHelpers";
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 const QuestionMarkEntryTable = ({ questions, studentsQuestionsData }) => {
+
+  const [loading, setLoading] = useState(false);
   
   const maxQuestionNumber = Math.max(...questions.map(q => parseInt(q.no, 10)));
 
@@ -73,48 +77,57 @@ const QuestionMarkEntryTable = ({ questions, studentsQuestionsData }) => {
     });
   };
   
+
+  const handleSubmit = () => {
+    setLoading(true);
   
-
-  const handleSubmit = () =>{
-    setStudentsData((prevData) => {
-      return prevData.map(student => {
-        student.answers.forEach(answer => {
-          if (!answer.isEditable) {
-            answer.acquiredMark = null;
-          }
+    setStudentsData(prevData => {
+      const updatedData = prevData.map(student => ({
+        ...student,
+        answers: student.answers.map(answer => ({
+          ...answer,
+          acquiredMark: answer.isEditable ? answer.acquiredMark : null
+        }))
+      }));
+  
+      const newStudentsData = updatedData.map(student => ({
+        studentId: student.studentId,
+        name: student.name,
+        answers: student.answers.map(answer => ({
+          questionId: answer.questionId,
+          questionNo: answer.questionNo,
+          acquiredMark: answer.acquiredMark,
+          totalMark: answer.totalMark,
+          questionCo: answer.questionCo
+        }))
+      }));
+  
+      createStudentsQuestionsMark(newStudentsData)
+        .then(res => {
+          console.log("Submitted students data", newStudentsData);
+          console.log(res);
+        })
+        .catch(err => {
+          console.error(err);
+        })
+        .finally(() => {
+          setLoading(false);
         });
-        return student;
-      });
+  
+      return updatedData;
     });
+  };  
 
-    const newStudentsData = studentsData.map(student => ({
-      studentId: student.studentId,
-      name: student.name,
-      answers: student.answers.map(answer => ({
-        questionId: answer.questionId,
-        questionNo: answer.questionNo,
-        acquiredMark: answer.acquiredMark,
-        totalMark: answer.totalMark,
-        questionCo: answer.questionCo
-      }))
-    }));
-
-    setStudentsData(newStudentsData);
-
-    createStudentsQuestionsMark(newStudentsData)
-      .then((res) => {
-        console.log(res);
-      }).catch((err) => {
-        console.error(err);
-      });
-
-  console.log("Submitted students data",studentsData);
-  }
 
   return (
     <>
+        {loading && (
+          <div style={{display: 'flex',justifyContent: 'center',alignItems: 'center',height: '200px',width: '100%',}}>
+            <CircularProgress />
+          </div>
+        )}
    <Paper sx={{ width: '100%' }}>
-  <TableContainer sx={{ maxHeight: '100vh', overflowX: 'auto' }}>
+   <TableContainer sx={{ maxHeight: '100vh', overflowX: 'auto' }}>
     <Table stickyHeader aria-label="sticky table">
       <TableHead>
         {/* Question number row */}
