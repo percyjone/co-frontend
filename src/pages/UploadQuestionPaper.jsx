@@ -126,8 +126,7 @@ const UploadQuestionPaper = () => {
   </Typography>
   ) 
 </Typography>
-<Box 
-width="100vh">
+<Box>
             <UploadQP 
               subjectCode={selectionData.subject} 
               examName={selectionData.examName} 

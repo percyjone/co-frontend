@@ -63,7 +63,7 @@ const UploadQP = ({subjectCode,examName,examYear,semester}) => {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
-      <Box display="flex"
+    <Box display="flex"
     flexDirection="column"
     alignItems="center"
     gap={2}
@@ -71,7 +71,7 @@ const UploadQP = ({subjectCode,examName,examYear,semester}) => {
     border="1px solid #ccc"
     borderRadius="8px"
     boxShadow="0px 4px 10px rgba(0, 0, 0, 0.1)"
-    width="50%"
+    width="100%"
     maxWidth="500px"
   >
       <Typography variant="h5">Upload a .docx File</Typography>
