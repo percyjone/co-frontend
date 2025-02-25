@@ -8,9 +8,14 @@ import {
   TableRow,
   Paper,
   Button,
+  Stack,
+  Typography,
+  Grid
 } from "@mui/material";
 
-const ReportTable = ({ questions, studentsQuestionsData }) => {
+
+const ReportTable = ({ year, sec, dept, examName, examYear, semester, subject, 
+  questions, studentsQuestionsData }) => {
   const maxQuestionNumber = Math.max(...questions.map(q => parseInt(q.no, 10)));
   const questionOccurences = Array(maxQuestionNumber + 1).fill(0);
 
@@ -56,13 +61,48 @@ const ReportTable = ({ questions, studentsQuestionsData }) => {
               top: 0;
               width: 100%;
             }
+              .print-header::after {
+              display: block;
+              font-weight: bold;
+              color: red;
+              text-align: center;
+              margin-top: 10px;
+            }
           }
         `}
       </style>
 
       <div id="printTable">
+      <Stack className="print-header" spacing={0.5} alignItems="center">
+      <Typography variant="h6" fontWeight="bold">
+        PSNA College Of Engineering And Technology
+      </Typography>
+      <Typography variant="subtitle1">
+        Department of Computer Science Engineering
+      </Typography>
+      <Grid container  >
+    <Grid item  sx={{  paddingX: 10, paddingLeft:70}}>
+      <Typography variant="body1" style={{ fontWeight: "bold", textAlign: "left" }}>
+        Subject Code: {subject}
+      </Typography>
+    </Grid>
+
+    {/* Center-aligned Exam Details */}
+    <Grid item sx={{  paddingRight:1}}> 
+      <Typography variant="body1">{examName } {examYear}</Typography>
+    </Grid>
+
+    {/* Right-aligned Section Info */}
+    <Grid item>
+      <Typography variant="body1" style={{ fontWeight: "bold", textAlign: "right" }}>
+        {year} {sec} {dept}
+      </Typography>
+    </Grid>
+  </Grid>
+      
+    </Stack>
         <Paper sx={{ width: '100%' }}>
-          <TableContainer sx={{maxHeight: '100vh',overflowX: 'visible' }}>
+          <TableContainer sx={{ maxHeight: '100vh', overflowX: 'visible' }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>

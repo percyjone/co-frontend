@@ -159,9 +159,19 @@ const ReportPage = ({subject,examName,examYear,semester}) => {
       </div>}
     {studentData.length > 0 && questions.length > 0 &&
     <>
-    <h1>{selectionData.examName} {selectionData.examYear} {selectionData.semester} {selectionData.subject}</h1>
-    <h1>{selectionData.year} {selectionData.sec} {selectionData.dept}</h1>
-    <ReportTable subject={selectionData.subject} questions={questions} studentsQuestionsData={studentData}/>
+
+    <ReportTable 
+  year={selectionData.year} 
+  sec={selectionData.sec} 
+  dept={selectionData.dept} 
+  examName={selectionData.examName} 
+  examYear={selectionData.examYear} 
+  semester={selectionData.semester} 
+  subject={selectionData.subject} 
+  questions={questions} 
+  studentsQuestionsData={studentData} 
+/>
+
     </>
     }
     </div>
