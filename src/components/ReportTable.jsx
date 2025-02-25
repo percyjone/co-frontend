@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef} from "react";
 import {
   Table,
   TableBody,
@@ -9,124 +9,87 @@ import {
   Paper,
   Button,
 } from "@mui/material";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {createStudentsQuestionsMark} from "../apiHelpers/apiHelpers";
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { useReactToPrint } from "react-to-print";
 
-const QuestionMarkEntryTable = ({ questions, studentsQuestionsData }) => {
 
-  const [loading, setLoading] = useState(false);
-  
-  const maxQuestionNumber = Math.max(...questions.map(q => parseInt(q.no, 10)));
+const  ReportTable = ({ questions, studentsQuestionsData }) => {
+      
+      const maxQuestionNumber = Math.max(...questions.map(q => parseInt(q.no, 10)));
+    
+      const questionOccurences = Array(maxQuestionNumber + 1).fill(0);
+    
+      questions.forEach(({ no }) => {
+        const questionNo = parseInt(no, 10);
+        questionOccurences[questionNo] = (questionOccurences[questionNo] || 0) + 1;
+      });
+    
+      const slicedQuestionOccurences = questionOccurences.slice(1);
+    
+      const allOptions = questions.reduce((acc, { option }) => {
+        acc.push(option || 1);
+        return acc;
+      }, []);
+    
+      const allSubdivisions = questions.reduce((acc, { subDivision }) => {
+        acc.push(subDivision || 1);
+        return acc;
+      }, []);
+    
+      const [studentsData, setStudentsData] = useState(
+        studentsQuestionsData.map(student => ({
+          ...student,
+          answers: student.answers.map(answer => ({
+            ...answer,
+            isEditable: false,
+          })),
+        }))
+      );
 
-  const questionOccurences = Array(maxQuestionNumber + 1).fill(0);
+      const tableRef = useRef();
 
-  questions.forEach(({ no }) => {
-    const questionNo = parseInt(no, 10);
-    questionOccurences[questionNo] = (questionOccurences[questionNo] || 0) + 1;
-  });
+      const handlePrint = useReactToPrint({
+        content: () => tableRef.current, // Selects only the table for printing
+      });
 
-  const slicedQuestionOccurences = questionOccurences.slice(1);
+      useEffect(() => {
+        console.log("Table Ref: ", tableRef.current);
+      }, []);
 
-  const allOptions = questions.reduce((acc, { option }) => {
-    acc.push(option || 1);
-    return acc;
-  }, []);
+    function getStudentCoMarks(answersData) {
+      const CoMarks = new Map();
 
-  const allSubdivisions = questions.reduce((acc, { subDivision }) => {
-    acc.push(subDivision || 1);
-    return acc;
-  }, []);
-
-  const [studentsData, setStudentsData] = useState(studentsQuestionsData);
-
-  console.log("Student data",studentsData);
-  console.log(questions);
-
-  const handleChange = (studentIndex, questionIndex, newValue) => {
-    setStudentsData((prevData) => {
-      const updatedData = [...prevData];
-  
-      const currentAnswer = updatedData[studentIndex].answers[questionIndex];
-      currentAnswer.acquiredMark = newValue;
-  
-      if (currentAnswer.questionNo.endsWith("A")) {
-        const relatedQuestionNo = currentAnswer.questionNo.replace("A", "B");
-  
-        const relatedCells = updatedData[studentIndex].answers.filter(
-          (answer) => answer.questionNo === relatedQuestionNo
-        );
-  
-        if (relatedCells.length) {
-          relatedCells.forEach(cell => cell.isEditable = !newValue.trim());
+      try {
+        for (const answerData of answersData) {
+          CoMarks.set(
+            answerData.questionCo,
+            CoMarks.has(answerData.questionCo)
+              ? CoMarks.get(answerData.questionCo) + answerData.acquiredMark
+              : answerData.acquiredMark
+          )
         }
-      } else if (currentAnswer.questionNo.endsWith("B")) {
-        const relatedQuestionNo = currentAnswer.questionNo.replace("B", "A");
-  
-        const relatedCells = updatedData[studentIndex].answers.filter(
-          (answer) => answer.questionNo === relatedQuestionNo
+
+        // Sort the Map by key
+        const sortedCoMarks = new Map(
+          [...CoMarks.entries()].sort((a, b) => a[0] - b[0])
         );
-  
-        if (relatedCells.length) {
-          relatedCells.forEach(cell => cell.isEditable = !newValue.trim());
-        }
+
+        // Return the Map values as an array
+        return Array.from(sortedCoMarks.values());
+      } catch (error) {
+        console.error(error);
+        return [];
       }
-  
-      return updatedData;
-    });
-  };
-  
-
-  const handleSubmit = () => {
-    setLoading(true);
-  
-    setStudentsData(prevData => {
-      const updatedData = prevData.map(student => ({
-        ...student,
-        answers: student.answers.map(answer => ({
-          ...answer,
-          acquiredMark: answer.isEditable ? answer.acquiredMark : null
-        }))
-      }));
-  
-      const newStudentsData = updatedData.map(student => ({
-        studentId: student.studentId,
-        name: student.name,
-        answers: student.answers.map(answer => ({
-          questionId: answer.questionId,
-          questionNo: answer.questionNo,
-          acquiredMark: answer.acquiredMark,
-          totalMark: answer.totalMark,
-          questionCo: answer.questionCo
-        }))
-      }));
-  
-      createStudentsQuestionsMark(newStudentsData)
-        .then(res => {
-          console.log("Submitted students data", newStudentsData);
-          console.log(res);
-        })
-        .catch(err => {
-          console.error(err);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-  
-      return updatedData;
-    });
-  };  
-
-
+    }
+      
+    
   return (
-    <>
-        {loading && (
-          <div style={{display: 'flex',justifyContent: 'center',alignItems: 'center',height: '200px',width: '100%',}}>
-            <CircularProgress />
-          </div>
-        )}
-   <Paper sx={{ width: '100%' }}>
+    <div>
+    <div ref={tableRef}>
+      <Paper sx={{ width: '100%' }}>
    <TableContainer sx={{ maxHeight: '100vh', overflowX: 'auto' }}>
     <Table stickyHeader aria-label="sticky table">
       <TableHead>
@@ -137,7 +100,7 @@ const QuestionMarkEntryTable = ({ questions, studentsQuestionsData }) => {
               backgroundColor: '#F8F9FA',
               position: 'sticky',
               top: 0,
-              left: 0, // Sticky left for the first column
+              left: 0,
               zIndex: 2,
               padding: 0,
             }}
@@ -159,6 +122,20 @@ const QuestionMarkEntryTable = ({ questions, studentsQuestionsData }) => {
               colSpan={count}
             >
               Q{index + 1} <br />
+            </TableCell>
+          ))}
+          {Array.from({ length: 3 }).map((_, index) => (
+            <TableCell
+              key={index}
+              style={{
+                backgroundColor: '#F8F9FA',
+                position: 'sticky',
+                top: 0  ,
+                zIndex: 1,
+              }}
+              align="center"
+            >
+              CO {index + 1}
             </TableCell>
           ))}
         </TableRow>
@@ -202,6 +179,19 @@ const QuestionMarkEntryTable = ({ questions, studentsQuestionsData }) => {
               />
             )
           )}
+          {Array.from({ length: 3 }).map((_, index) => (
+            <TableCell
+              key={index}
+              style={{
+                backgroundColor: '#F8F9FA',
+                position: 'sticky',
+                top: 0  ,
+                zIndex: 1,
+              }}
+              align="center"
+            >
+            </TableCell>
+          ))}
         </TableRow>
 
         {/* Subdivision row */}
@@ -254,6 +244,19 @@ const QuestionMarkEntryTable = ({ questions, studentsQuestionsData }) => {
               </TableCell>
             )
           )}
+          {Array.from({ length: 3 }).map((_, index) => (
+            <TableCell
+              key={index}
+              style={{
+                backgroundColor: '#F8F9FA',
+                position: 'sticky',
+                top: 0  ,
+                zIndex: 1,
+              }}
+              align="center"
+            >
+            </TableCell>
+          ))}
         </TableRow>
       </TableHead>
 
@@ -274,20 +277,7 @@ const QuestionMarkEntryTable = ({ questions, studentsQuestionsData }) => {
             {student.answers.map((answer, questionIndex) => (
               <TableCell
                 key={questionIndex}
-                onInput={(e) => {
-                  const selection = window.getSelection();
-                  const range = selection.getRangeAt(0);
-
-                  const caretPosition = range.endOffset; // Save caret position
-                  e.target.innerText = e.target.innerText.replace(/[^0-9]/g, ''); // Only numeric input
-
-                  // Restore the caret position
-                  range.setStart(e.target.firstChild || e.target, caretPosition);
-                  range.setEnd(e.target.firstChild || e.target, caretPosition);
-                  selection.removeAllRanges();
-                  selection.addRange(range);
-                }}
-                contentEditable={answer.isEditable}
+                contentEditable={false}
                 onBlur={(e) => {
                   const enteredValue = parseInt(e.target.innerText, 10);
                   if (enteredValue > answer.totalMark) {
@@ -304,16 +294,30 @@ const QuestionMarkEntryTable = ({ questions, studentsQuestionsData }) => {
                 {answer.acquiredMark}
               </TableCell>
             ))}
+            {/* {(getStudentCoMarks(student.answers)).map((CoMark, index) => (
+              <TableCell
+                key={index}
+                contentEditable={false}
+                suppressContentEditableWarning={true}
+                style={{
+                  backgroundColor: '#ededed',
+                  cursor: 'not-allowed',
+                }}
+              > 
+                {CoMark}
+              </TableCell>
+            ))} */}
           </TableRow>
         ))}
       </TableBody>
     </Table>
   </TableContainer>
-  <Button onClick={handleSubmit}>Submit</Button>
 </Paper>
+</div>
+  <Button onClick={handlePrint}>Print</Button>
 
-    </>
-  );
-};
+    </div>
+  )
+}
 
-export default QuestionMarkEntryTable;
+export default ReportTable

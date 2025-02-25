@@ -1,6 +1,7 @@
 import React from "react"
 import { Button, Box } from '@mui/material';
 import { useNavigate } from "react-router-dom";
+import ReportPage from "./ReportPage";
 
 const Home = () => {
 
@@ -29,6 +30,9 @@ const Home = () => {
         </Button>
         <Button onClick={handleStudentMarkEntry} variant="contained">
           Student mark entry
+        </Button>
+        <Button onClick={() => navigate('/report')} variant="contained">
+          Generate Report
         </Button>
       </Box>
     );

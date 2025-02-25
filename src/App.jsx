@@ -9,6 +9,7 @@ import { questions } from "./markEntryTableInput.js";
 // import Auth from "./components/Auth.jsx";
 import Home from "./pages/Home.jsx";
 import UploadQP from "./components/UploadQP.jsx";
+import ReportPage from "./pages/ReportPage.jsx";
 const App = () => {
   return (
     <Router>
@@ -18,8 +19,9 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/upload" element={<UploadQuestionPaper />} />
         <Route path="/studentMarkEntry" element={<StudentMarkEntry subject="" examName="" examYear="" semester=""/>} />
+        <Route path="/report" element={<ReportPage subject="" examName="" examYear="" semester=""/>} />
       </Routes>
-    </div>
+      </div>
     
     </Router>
   );
