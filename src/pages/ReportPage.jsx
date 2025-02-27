@@ -20,6 +20,7 @@ const ReportPage = ({subject,examName,examYear,semester}) => {
         year: '',
         sec:'',
         dept:'',
+        faculty:'',
       });
 
       const handleExamDetails = (formData) => {
@@ -32,7 +33,8 @@ const ReportPage = ({subject,examName,examYear,semester}) => {
           ...prevData,
           year: formData.year, 
           sec: formData.sec,
-          dept:formData.dept 
+          dept:formData.dept,
+          faculty:formData.faculty,
         }));
         setIsStudentSelected(true);
       }
@@ -117,6 +119,7 @@ const ReportPage = ({subject,examName,examYear,semester}) => {
               studentId: student.studentId,
               name: student.name,
               answers: student.answers,
+              coMarks:student.coMarks
             };
           });
     
@@ -160,17 +163,7 @@ const ReportPage = ({subject,examName,examYear,semester}) => {
     {studentData.length > 0 && questions.length > 0 &&
     <>
 
-    <ReportTable 
-  year={selectionData.year} 
-  sec={selectionData.sec} 
-  dept={selectionData.dept} 
-  examName={selectionData.examName} 
-  examYear={selectionData.examYear} 
-  semester={selectionData.semester} 
-  subject={selectionData.subject} 
-  questions={questions} 
-  studentsQuestionsData={studentData} 
-/>
+    <ReportTable questions={questions} studentsQuestionsData={studentData}  selectionData={selectionData}/>
 
     </>
     }

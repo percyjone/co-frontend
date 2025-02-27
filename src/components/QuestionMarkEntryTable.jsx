@@ -8,16 +8,21 @@ import {
   TableRow,
   Paper,
   Button,
+  Typography,
 } from "@mui/material";
 import { useState } from 'react';
 import {createStudentsQuestionsMark} from "../apiHelpers/apiHelpers";
 import CircularProgress from '@mui/material/CircularProgress';
+import { useNavigate } from "react-router-dom";
+
 
 
 const QuestionMarkEntryTable = ({ questions, studentsQuestionsData }) => {
 
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
-  
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const maxQuestionNumber = Math.max(...questions.map(q => parseInt(q.no, 10)));
 
   const questionOccurences = Array(maxQuestionNumber + 1).fill(0);
@@ -104,6 +109,7 @@ const QuestionMarkEntryTable = ({ questions, studentsQuestionsData }) => {
   
       createStudentsQuestionsMark(newStudentsData)
         .then(res => {
+          setIsSubmitted(true);
           console.log("Submitted students data", newStudentsData);
           console.log(res);
         })
@@ -111,6 +117,13 @@ const QuestionMarkEntryTable = ({ questions, studentsQuestionsData }) => {
           console.error(err);
         })
         .finally(() => {
+          setStudentsData(prevData => prevData.map(student => ({
+            ...student,
+            answers: student.answers.map(answer => ({
+              ...answer,
+              isEditable: false
+            }))
+          })));
           setLoading(false);
         });
   
@@ -310,6 +323,10 @@ const QuestionMarkEntryTable = ({ questions, studentsQuestionsData }) => {
     </Table>
   </TableContainer>
   <Button onClick={handleSubmit}>Submit</Button>
+  {isSubmitted &&
+  <> 
+  <Button onClick={() => navigate('/report')}>Go to Report Page</Button>
+  </>}
 </Paper>
 
     </>
