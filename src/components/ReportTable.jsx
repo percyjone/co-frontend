@@ -70,45 +70,16 @@ const  ReportTable = ({ questions, studentsQuestionsData, selectionData }) => {
       };
 
   return (
-    <div>
-          <style>
-        {`
-            @media print {
-              body * {
-                visibility: hidden;
-              }
-              #printTable, #printTable * {
-                visibility: visible;
-              }
-              #printTable {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100% !important;
-                max-width: 100% !important;
-                overflow: visible !important;
-              }
-            }
-        `}
-      </style>
-    <div id="printTable">
-    <Card
-      sx={{
-        maxWidth: 600,
-        mx: "auto",
-        my: 3,
-        p: 3,
-        borderRadius: 3,
-        boxShadow: 3,
-        backgroundColor: "#F8F9FA",
-      }}
-    >
+    <Box>
+
+    <Box id="printTable">
+ 
       <CardContent>
         {/* College Name */}
         <Typography
           variant="h5"
           align="center"
-          sx={{ fontWeight: "bold", color: "#1976D2" }}
+          sx={{ fontWeight: "bold", color: "#1976D2"  }}
         >
           PSNA College of Engineering and Technology
         </Typography>
@@ -117,17 +88,23 @@ const  ReportTable = ({ questions, studentsQuestionsData, selectionData }) => {
         <Typography
           variant="h6"
           align="center"
-          sx={{ fontWeight: "bold", color: "#555", mt: 1 }}
+          sx={{ fontWeight: "bold", color: "#555"}}
         >
           Department of COMPUTER SCIENCE ENGINEERING
         </Typography>
-
-        <Divider sx={{ my: 2 }} />
+        <Divider sx={{ my: 2, backgroundColor: "#ccc" }} />
+        <Typography
+          variant="h6"
+          align="center"
+          sx={{ fontWeight: "bold", color: "#555"}}
+        >
+         REPORT
+        </Typography>
+        <Divider sx={{  backgroundColor: "#ccc" }} />
 
         {/* Subject Name & Code */}
         <Typography
-            variant="body1"
-            sx={{ fontWeight: "bold", mb: 1 }}
+            sx={{ fontWeight: "bold"}}
           >
             Subject:{" "}
             <span style={{ fontWeight: "normal" }}>
@@ -138,80 +115,74 @@ const  ReportTable = ({ questions, studentsQuestionsData, selectionData }) => {
         </Typography>
 
 
-        <Divider sx={{ my: 2 }} />
+        <Divider sx={{  backgroundColor: "#ccc" }} />
 
         {/* Exam, Year, and Semester */}
-        <Grid container spacing={2} sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Grid item>
-            <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+       
+         
+            <Typography variant="body1" sx={{ fontWeight: "bold"}}>
               Exam:{" "}
               <span style={{ fontWeight: "normal" }}>
                 {selectionData.examName || "N/A"}
               </span>
             </Typography>
-          </Grid>
-          <Grid item>
-            <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+            <Divider sx={{  backgroundColor: "#ccc" }} />
+            <Typography variant="body1" sx={{ fontWeight: "bold"}}>
               Semester:{" "}
               <span style={{ fontWeight: "normal" }}>
                 {selectionData.semester || "N/A"}
               </span>
             </Typography>
-          </Grid>
-          <Grid item>
-            <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+            <Divider sx={{ backgroundColor: "#ccc" }} />
+            <Typography variant="body1" sx={{ fontWeight: "bold"}}>
               Year:{" "}
               <span style={{ fontWeight: "normal" }}>
                 {selectionData.examYear || "N/A"}
               </span>
             </Typography>
-          </Grid>
-        </Grid>
+            <Divider sx={{  backgroundColor: "#ccc" }} />
 
-        <Divider sx={{ my: 2 }} />
+        
 
         {/* Year, Department, Section */}
-        <Grid container spacing={2} sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Grid item>
-            <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+        
+            <Typography variant="body1" sx={{ fontWeight: "bold"}}>
               Year:{" "}
               <span style={{ fontWeight: "normal" }}>
                 {selectionData.year || "N/A"}
               </span>
             </Typography>
-          </Grid>
-          <Grid item>
-            <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+            <Divider sx={{  backgroundColor: "#ccc" }} />
+            <Typography variant="body1" sx={{ fontWeight: "bold"}}>
               Department:{" "}
               <span style={{ fontWeight: "normal" }}>
                 {selectionData.dept || "N/A"}
               </span>
             </Typography>
-          </Grid>
-          <Grid item>
-            <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+            <Divider sx={{  backgroundColor: "#ccc" }} />
+            <Typography variant="body1" sx={{ fontWeight: "bold"}}>
               Section:{" "}
               <span style={{ fontWeight: "normal" }}>
                 {selectionData.sec || "N/A"}
               </span>
             </Typography>
-          </Grid>
-        </Grid>
+            <Divider sx={{ backgroundColor: "#ccc" }} />
 
-        <Divider sx={{ my: 2 }} />
+      
 
         {/* Faculty Name */}
         <Typography
           variant="body1"
-          sx={{ fontWeight: "bold", mt: 2 }}
+          sx={{ fontWeight: "bold"}}
         >
           Faculty:{" "}
           <span style={{ fontWeight: "normal" }}>
             {selectionData.faculty || "N/A"}
           </span>
         </Typography>
+        <Divider sx={{  backgroundColor: "#ccc" }} />
       </CardContent>
-    </Card>
+  
 
 
 
@@ -472,9 +443,9 @@ const  ReportTable = ({ questions, studentsQuestionsData, selectionData }) => {
     </Table>
   </TableContainer>
 </Paper>
-</div>
+</Box>
   <Button onClick={handlePrint}>Print</Button>
-</div>
+  </Box>
   )
 }
 

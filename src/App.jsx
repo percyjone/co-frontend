@@ -14,7 +14,6 @@ const App = () => {
   return (
     <Router>
     <div className="App">
-      <h1>Student Mark Visualization</h1>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/upload" element={<UploadQuestionPaper />} />
