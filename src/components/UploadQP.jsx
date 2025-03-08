@@ -106,7 +106,6 @@ const UploadQP = ({subjectCode,examName,examYear,semester}) => {
   };
 
   const handleSubmitAssessment = async () => {
-    // Validate total CO marks equals maximum marks
     const totalCOMarks = Object.values(coMarks).reduce((sum, val) => sum + Number(val), 0);
     
     if (totalCOMarks !== Number(maxMarks)) {
@@ -114,18 +113,35 @@ const UploadQP = ({subjectCode,examName,examYear,semester}) => {
       return;
     }
 
+    const questions = Object.entries(coMarks)
+      .filter(([_, value]) => value !== null)
+      .map(([key, value], index) => ({
+      no: index + 1,
+      option: null,
+      subdivision: null,
+      question: null,
+      marks: Number(value),
+      co: Number(key.match(/\d+/)[0]),
+      bl: null,
+      pi: null
+    }));
+
+    const exam = {
+      name: examName,
+      year: parseInt(examYear),
+      semester: parseInt(semester)
+    }
+
     const assessmentData = {
-      subjectCode,
-      examName,
-      examYear: parseInt(examYear),
-      semester: parseInt(semester),
-      maxMarks: Number(maxMarks),
-      coMarks
+      subject : subjectCode,
+      exam,
+      questionList: questions
     };
 
     try {
       console.log('Assessment data:', assessmentData);
-      // navigate('/studentMarkEntry');
+      const response = await createQuestions(assessmentData.subject,assessmentData.questionList,assessmentData.exam);
+      console.log('Response from creating questions:', response);
     } catch (error) {
       console.error('Error saving assessment data:', error);
     }

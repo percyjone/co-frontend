@@ -3,6 +3,8 @@ import SelectionComponent from '../components/Selection';
 import {getExamQuestions,getStudentsByYearSecAndDept,getStudentQuestionMarksByStudentIdQuestionId, getStudents,getStudentsQuestionsMark} from '../apiHelpers/apiHelpers';
 import QuestionMarkEntryTable from '../components/QuestionMarkEntryTable.jsx';
 import CircularProgress from '@mui/material/CircularProgress';
+import ExamDetails from '../components/ExamDetails.jsx';
+import Header from '../components/header.jsx';
 
 
 const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
@@ -21,6 +23,7 @@ const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
         year: '',
         sec:'',
         dept:'',
+        faculty:''
       });
 
       const handleExamDetails = (formData) => {
@@ -83,6 +86,7 @@ const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
           year: selectionData.year,
           sec: selectionData.sec,
           dept: selectionData.dept,
+          faculty: selectionData.faculty
         },
       };
     
@@ -137,6 +141,7 @@ const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
 
   return (
     <div>
+    <Header/>
     { subject === '' && examName === '' && examYear === '' && semester === '' && !isExamtSelected &&
       <SelectionComponent context='questionPaperEntry' onSubmit={handleExamDetails}/>
     }
@@ -158,8 +163,7 @@ const StudentMarkEntry = ({subject,examName,examYear,semester}) => {
       </div>}
     {studentData.length > 0 && questions.length > 0 &&
     <>
-    <h1>{selectionData.examName} {selectionData.examYear} {selectionData.semester} {selectionData.subject}</h1>
-    <h1>{selectionData.year} {selectionData.sec} {selectionData.dept}</h1>
+    <ExamDetails selectionData={selectionData}/>
     <QuestionMarkEntryTable subject={selectionData.subject} questions={questions} studentsQuestionsData={studentData}/>
     </>
     }

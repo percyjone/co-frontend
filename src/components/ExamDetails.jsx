@@ -1,6 +1,22 @@
-import React from 'react'
+import React from 'react';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    Button,
+    Card,
+    CardContent,
+    Typography,
+    Grid,
+    Box,
+    Divider
+  } from "@mui/material";
 
-const ExamDetails = () => {
+  const ExamDetails = ({selectionData}) => {
   return (
     <Card
     sx={{

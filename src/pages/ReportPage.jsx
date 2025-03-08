@@ -3,6 +3,7 @@ import ReportTable from '../components/ReportTable';
 import { getExamQuestions, getReport, getStudentsQuestionsMark } from '../apiHelpers/apiHelpers';
 import CircularProgress from '@mui/material/CircularProgress';
 import SelectionComponent from '../components/Selection';
+import Header from '../components/header';
 
 const ReportPage = ({subject,examName,examYear,semester}) => {
 
@@ -140,6 +141,7 @@ const ReportPage = ({subject,examName,examYear,semester}) => {
     
   return (
     <div>
+    <Header/>
        <div>
     { subject === '' && examName === '' && examYear === '' && semester === '' && !isExamtSelected &&
       <SelectionComponent context='questionPaperEntry' onSubmit={handleExamDetails}/>

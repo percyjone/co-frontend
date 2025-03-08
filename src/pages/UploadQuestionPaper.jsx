@@ -8,6 +8,7 @@ import UploadQP from '../components/UploadQP.jsx';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import Header from '../components/header.jsx';
 
 
 
@@ -80,6 +81,7 @@ const UploadQuestionPaper = () => {
 
   return (
     <>
+    <Header/>
       {showQuestionSelection && (
         <SelectionComponent context="questionPaperEntry" onSubmit={handleQuestionPaperSubmit} />
       )}
